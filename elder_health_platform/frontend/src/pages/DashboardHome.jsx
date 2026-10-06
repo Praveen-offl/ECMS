@@ -1,7 +1,8 @@
 import React from "react";
 import { useOutletContext, Link } from "react-router-dom";
+import TopSummaryRow from "../components/vitals/TopSummaryRow";
+import HeartRateTrendCard from "../components/vitals/HeartRateTrendCard";
 import VitalsMonitor from "../components/vitals/VitalsMonitor";
-import VitalsTrendChart from "../components/vitals/VitalsTrendChart";
 import AnomalyLogTable from "../components/anomalies/AnomalyLogTable";
 import { useDashboardStore } from "../store/dashboardStore";
 
@@ -26,10 +27,11 @@ export default function DashboardHome() {
   }
 
   return (
-    <>
-      <VitalsMonitor latest={latest} history={history} />
-      <VitalsTrendChart latest={latest} history={history} />
+    <div className="space-y-5">
+      <TopSummaryRow latest={latest} />
+      <HeartRateTrendCard latest={latest} history={history} />
+      <VitalsMonitor latest={latest} />
       <AnomalyLogTable anomalies={anomalies} onAcknowledge={acknowledgeAnomaly} />
-    </>
+    </div>
   );
 }

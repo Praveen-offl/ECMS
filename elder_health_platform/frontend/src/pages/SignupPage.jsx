@@ -43,8 +43,6 @@ export default function SignupPage() {
     setError("");
     setSubmitting(true);
     try {
-      // Creates the caregiver document in MongoDB and returns a session
-      // token, same shape as /api/v1/auth/login (backend/app/auth/routes.py).
       const data = await signupRequest({ fullName, email, password });
       setSession({ access_token: data.access_token, caregiver: data.caregiver });
       navigate("/dashboard");
@@ -60,25 +58,20 @@ export default function SignupPage() {
     <div className="min-h-screen bg-canvas flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-4xl bg-surface rounded-[32px] shadow-sm overflow-hidden grid md:grid-cols-2">
         {/* Brand panel */}
-        <div className="hidden md:flex flex-col justify-between bg-gray-900 p-9 relative overflow-hidden">
-          <div
-            className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20"
-            style={{ background: "radial-gradient(circle, #14B8A6, transparent 70%)" }}
-          />
-          <div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
-                <Heart className="w-4 h-4 text-lime-300" fill="currentColor" strokeWidth={0} />
+        <div className="hidden md:flex flex-col justify-between p-9 relative overflow-hidden" style={{ background: "linear-gradient(160deg,#111827,#1e1b4b 70%,#0f172a)" }}>
+          <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-30 blur-3xl animate-float pointer-events-none" style={{ background: "radial-gradient(circle, #14B8A6, transparent 70%)" }} />
+          <div className="absolute bottom-10 -left-10 w-48 h-48 rounded-full opacity-20 blur-3xl animate-float pointer-events-none" style={{ background: "radial-gradient(circle, #8B5CF6, transparent 70%)", animationDelay: "2s" }} />
+
+          <div className="relative">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
+                <Heart className="w-4.5 h-4.5" fill="#bef264" strokeWidth={0} />
               </div>
-              <span className="w-7 h-7 rounded-lg bg-lime-300 flex items-center justify-center font-extrabold text-xs text-gray-900 font-display">
-                CW
-              </span>
+              <span className="font-display font-extrabold text-xl tracking-tight text-white">Revive</span>
             </div>
 
             <h2 className="text-white text-2xl font-extrabold font-display tracking-tight mt-8 leading-snug">
-              Smart Elderly Care
-              <br />
-              Monitoring System
+              Smart Elderly Care<br />Monitoring System
             </h2>
             <p className="text-gray-400 text-sm mt-3 leading-relaxed max-w-xs">
               Create a caregiver account to start watching live vitals, fall alerts, and
@@ -88,13 +81,13 @@ export default function SignupPage() {
 
           <div className="space-y-3 relative">
             {[
-              { icon: HeartPulse, text: "Live vitals for every patient" },
-              { icon: Video, text: "Real-time fall detection" },
-              { icon: Bell, text: "Instant caregiver alerts" },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2.5 text-sm text-gray-300">
-                <span className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
-                  <Icon className="w-3.5 h-3.5 text-lime-300" />
+              { icon: HeartPulse, text: "Live vitals for every patient", gradient: "linear-gradient(135deg,#8B5CF6,#6366F1)" },
+              { icon: Video, text: "Real-time fall detection", gradient: "linear-gradient(135deg,#0EA5E9,#06B6D4)" },
+              { icon: Bell, text: "Instant caregiver alerts", gradient: "linear-gradient(135deg,#FB923C,#F59E0B)" },
+            ].map(({ icon: Icon, text, gradient }) => (
+              <div key={text} className="flex items-center gap-2.5 text-sm text-gray-200">
+                <span className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: gradient }}>
+                  <Icon className="w-3.5 h-3.5 text-white" />
                 </span>
                 {text}
               </div>
@@ -137,7 +130,7 @@ export default function SignupPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@carewatch.io"
+                  placeholder="you@revive.io"
                   className="bg-transparent outline-none text-sm text-gray-900 placeholder:text-gray-400 w-full"
                   autoComplete="email"
                 />
@@ -171,7 +164,8 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-semibold py-3.5 rounded-2xl hover:bg-gray-800 transition-colors mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 text-white text-sm font-semibold py-3.5 rounded-2xl hover:opacity-90 transition-opacity mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: "linear-gradient(135deg,#111827,#1e1b4b)" }}
             >
               {submitting ? (
                 <>

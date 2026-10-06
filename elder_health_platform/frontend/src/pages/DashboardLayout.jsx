@@ -99,7 +99,7 @@ export default function DashboardLayout() {
   }, [selectedPatientId, setAnomalies]);
 
   return (
-    <div className="min-h-screen bg-canvas p-4 sm:p-6">
+    <div className="min-h-screen bg-canvas hero-wash p-4 sm:p-6">
       <div
         className="h-2 rounded-full mb-4"
         style={{ background: "linear-gradient(90deg, #14B8A6 0%, #0EA5E9 55%, #6366F1 100%)" }}

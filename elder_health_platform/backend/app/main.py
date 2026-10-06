@@ -532,7 +532,7 @@ async def link_patient(
     )
     if existing.scalar_one_or_none() is None:
         db.add(CaregiverPatientMap(caregiver_id=caregiver.id, patient_id=patient.id, relation="linked"))
-        await db.flush()
+        await db.commit()
 
     severity = await _latest_alert_severity(db, patient.id)
     return PatientResponse(

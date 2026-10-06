@@ -4,19 +4,13 @@ import { LayoutGrid, Heart, Activity, Users, Bell, Settings, LogOut } from "luci
 import { useAuthStore } from "../../store/authStore";
 
 const NAV_ICONS = [
-  { icon: Heart, to: "/dashboard", label: "Dashboard", end: true },
-  { icon: Activity, to: "/dashboard", label: "Vitals & Trends", end: true },
-  { icon: Users, to: "/dashboard/patients", label: "Patients" },
-  { icon: Bell, to: "/dashboard/alert-logs", label: "Alert Logs" },
-  { icon: Settings, to: "/dashboard/settings", label: "Settings" },
+  { icon: Heart, to: "/dashboard", label: "Dashboard", end: true, gradient: "linear-gradient(135deg,#8B5CF6,#6366F1)" },
+  { icon: Activity, to: "/dashboard", label: "Vitals & Trends", end: true, gradient: "linear-gradient(135deg,#8B5CF6,#6366F1)" },
+  { icon: Users, to: "/dashboard/patients", label: "Patients", gradient: "linear-gradient(135deg,#65A30D,#84CC16)" },
+  { icon: Bell, to: "/dashboard/alert-logs", label: "Alert Logs", gradient: "linear-gradient(135deg,#FB923C,#F59E0B)" },
+  { icon: Settings, to: "/dashboard/settings", label: "Settings", gradient: "linear-gradient(135deg,#0EA5E9,#06B6D4)" },
 ];
 
-/**
- * Floating pill icon-rail sidebar. Patient switching lives in the top
- * chip row (see DashboardLayout) rather than here, matching the reference
- * layout's minimal icon-only left rail. Every icon routes somewhere real —
- * see App.jsx for the nested /dashboard/* routes.
- */
 export default function Sidebar() {
   const navigate = useNavigate();
   const logout = useAuthStore((s) => s.logout);
@@ -31,21 +25,22 @@ export default function Sidebar() {
       <NavLink
         to="/dashboard"
         title="Dashboard"
-        className="w-10 h-10 rounded-2xl bg-gray-900 flex items-center justify-center mb-2"
+        className="w-10 h-10 rounded-2xl bg-gray-900 flex items-center justify-center mb-2 shadow-sm"
       >
-        <LayoutGrid className="w-4.5 h-4.5 text-white" strokeWidth={2.2} />
+        <LayoutGrid className="w-4.5 h-4.5 text-lime-300" strokeWidth={2.2} />
       </NavLink>
-      {NAV_ICONS.map(({ icon: Icon, to, label, end }) => (
+      {NAV_ICONS.map(({ icon: Icon, to, label, end, gradient }) => (
         <NavLink
           key={label}
           to={to}
           end={end}
           title={label}
           className={({ isActive }) =>
-            `w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-              isActive ? "bg-lime-300 text-gray-900" : "text-gray-400 hover:bg-gray-100"
+            `w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+              isActive ? "text-white shadow-md scale-105" : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             }`
           }
+          style={({ isActive }) => (isActive ? { background: gradient } : {})}
         >
           <Icon className="w-4.5 h-4.5" strokeWidth={2} />
         </NavLink>

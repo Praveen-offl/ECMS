@@ -2,18 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDashboardStore } from "../../store/dashboardStore";
 
-const STATUS_DOT = {
-  info: "bg-lime-400",
-  warning: "bg-orange-400",
-  critical: "bg-rose-500",
-};
-
-/**
- * Pill-style patient switcher, populated entirely from the real
- * `/api/v1/patients` roster (see api/patientsApi.js + dashboardStore).
- * Each chip's status dot reflects that patient's most recent real alert
- * severity, not a placeholder.
- */
 export default function PatientChipSwitcher() {
   const patients = useDashboardStore((s) => s.patients);
   const patientsLoading = useDashboardStore((s) => s.patientsLoading);
@@ -37,28 +25,31 @@ export default function PatientChipSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-2 px-1 flex-wrap">
+    <div className="flex flex-wrap gap-2 px-1">
       {patients.map((p) => {
-        const active = p.id === selectedPatientId;
+        const isSelected = p.id === selectedPatientId;
         return (
           <button
             key={p.id}
             onClick={() => setSelectedPatientId(p.id)}
-            className={`flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              active ? "bg-gray-900 text-white" : "bg-surface text-gray-500 hover:bg-gray-100"
+            className={`flex items-center gap-2 pl-1.5 pr-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+              isSelected ? "text-white shadow-md scale-105" : "bg-surface text-gray-600 hover:bg-gray-50 shadow-sm"
             }`}
+            style={isSelected ? { background: "linear-gradient(135deg,#8B5CF6,#6366F1)" } : {}}
           >
-            <span className="relative shrink-0">
-              <span
-                className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                  active ? "bg-lime-300 text-gray-900" : "bg-gray-100 text-gray-500"
-                }`}
-              >
-                {p.initials}
-              </span>
-              <span className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full ${STATUS_DOT[p.latest_status] || "bg-gray-300"}`} />
+            <span
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                isSelected ? "bg-white/25 text-white" : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {p.initials}
             </span>
             {p.full_name}
+            {p.latest_status && p.latest_status !== "info" && (
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${p.latest_status === "critical" ? "bg-rose-400" : "bg-orange-400"} ${isSelected ? "" : "animate-pulse"}`}
+              />
+            )}
           </button>
         );
       })}

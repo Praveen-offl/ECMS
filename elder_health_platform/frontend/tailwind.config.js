@@ -21,6 +21,21 @@ export default {
         mono: ["'Plus Jakarta Sans'", "sans-serif"],
         body: ["Inter", "sans-serif"],
       },
+      extend: {
+  // ...keep everything already there (colors, fontFamily, etc.)...
+  keyframes: {
+    'fade-in-up': { '0%': { opacity: '0', transform: 'translateY(16px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+    'pulse-glow': { '0%, 100%': { opacity: '1', transform: 'scale(1)' }, '50%': { opacity: '0.6', transform: 'scale(1.15)' } },
+    'float': { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+    'count-pulse': { '0%': { transform: 'scale(1)' }, '30%': { transform: 'scale(1.08)' }, '100%': { transform: 'scale(1)' } },
+  },
+  animation: {
+    'fade-in-up': 'fade-in-up 0.6s ease-out both',
+    'pulse-glow': 'pulse-glow 1.8s ease-in-out infinite',
+    'float': 'float 6s ease-in-out infinite',
+    'count-pulse': 'count-pulse 0.4s ease-out',
+  },
+},
     },
   },
   plugins: [],

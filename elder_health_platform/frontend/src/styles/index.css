@@ -18,3 +18,19 @@ body {
   background-color: #E2E5EA;
   border-radius: 999px;
 }
+.hover-lift { transition: transform .25s ease, box-shadow .25s ease; }
+.hover-lift:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,.12); }
+
+.hero-wash {
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(20,184,166,.22), transparent 60%),
+    radial-gradient(800px 500px at 90% 10%, rgba(99,102,241,.22), transparent 60%),
+    radial-gradient(700px 400px at 50% 100%, rgba(14,165,233,.16), transparent 60%);
+}
+
+.feature-card { border-top: 4px solid var(--accent); }
+.feature-icon { background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+
+.vital-tile { color: #fff; }
+.vital-tile .tile-icon { background: rgba(255,255,255,.22); }
+.vital-tile .tile-label { color: rgba(255,255,255,.85); }

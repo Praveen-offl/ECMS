@@ -1,64 +1,58 @@
 import React from "react";
-import { formatRelativeDay } from "../../utils/formatters";
+import { Check, AlertTriangle, AlertCircle, Info } from "lucide-react";
 
-const SEVERITY_PILL = {
-  info: "bg-violet-100 text-violet-700",
-  warning: "bg-orange-100 text-orange-700",
-  critical: "bg-rose-100 text-rose-700",
+const SEVERITY_STYLE = {
+  critical: { badge: "bg-rose-100 text-rose-700", icon: AlertCircle, dot: "bg-rose-500" },
+  warning: { badge: "bg-orange-100 text-orange-700", icon: AlertTriangle, dot: "bg-orange-500" },
+  info: { badge: "bg-sky-100 text-sky-700", icon: Info, dot: "bg-sky-500" },
 };
 
-export default function AnomalyLogTable({ anomalies, onAcknowledge }) {
+export default function AnomalyLogTable({ anomalies = [], onAcknowledge }) {
   return (
-    <section className="bg-surface rounded-[28px] shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between px-6 py-4">
-        <p className="text-sm font-semibold text-gray-900">Behavioral Anomaly Log</p>
+    <div className="bg-surface rounded-[28px] shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
+        <p className="text-sm font-bold text-gray-900 font-display">Anomaly Log</p>
         <span className="text-xs text-gray-400">{anomalies.length} entries</span>
       </div>
 
       {anomalies.length === 0 ? (
-        <p className="px-6 py-10 text-center text-sm text-gray-400">
-          No anomalies logged yet. This patient's routine is within their learned baseline.
-        </p>
+        <p className="px-6 py-10 text-center text-sm text-gray-400">No alerts for this patient yet.</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-[11px] text-gray-400 uppercase tracking-wide border-y border-gray-100">
-                <th className="px-6 py-2.5 font-semibold">Time</th>
-                <th className="px-6 py-2.5 font-semibold">Type</th>
-                <th className="px-6 py-2.5 font-semibold">Severity</th>
-                <th className="px-6 py-2.5 font-semibold">Description</th>
-                <th className="px-6 py-2.5 font-semibold text-right">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {anomalies.map((a) => (
-                <tr key={a.id} className="hover:bg-gray-50/60 transition-colors">
-                  <td className="px-6 py-3.5 text-gray-400 whitespace-nowrap text-xs font-medium">
-                    {formatRelativeDay(a.time)}
-                  </td>
-                  <td className="px-6 py-3.5 text-gray-700 font-medium whitespace-nowrap">{a.type}</td>
-                  <td className="px-6 py-3.5">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${SEVERITY_PILL[a.severity] || "bg-gray-100 text-gray-600"}`}>
-                      {a.severity.charAt(0).toUpperCase() + a.severity.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-3.5 text-gray-500">{a.description}</td>
-                  <td className="px-6 py-3.5 text-right">
-                    {a.status === "pending" ? (
-                      <button onClick={() => onAcknowledge(a.id)} className="text-xs font-semibold text-violet-600 hover:text-violet-800">
-                        Acknowledge
-                      </button>
-                    ) : (
-                      <span className="text-xs text-gray-400 capitalize">{a.status}</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="divide-y divide-gray-50">
+          {anomalies.map((a) => {
+            const style = SEVERITY_STYLE[a.severity] || SEVERITY_STYLE.info;
+            const Icon = style.icon;
+            const acknowledged = a.status === "acknowledged";
+            return (
+              <div key={a.id} className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50/60 transition-colors">
+                <span className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${style.badge}`}>
+                  <Icon className="w-4 h-4" />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{a.description}</p>
+                    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${style.badge}`}>{a.severity}</span>
+                  </div>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {a.type} · {new Date(a.time).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                  </p>
+                </div>
+                {onAcknowledge && (
+                  <button
+                    onClick={() => onAcknowledge(a.id)}
+                    disabled={acknowledged}
+                    className={`shrink-0 flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
+                      acknowledged ? "bg-lime-100 text-lime-700 cursor-default" : "bg-gray-100 text-gray-600 hover:bg-gray-900 hover:text-white"
+                    }`}
+                  >
+                    <Check className="w-3 h-3" /> {acknowledged ? "Acknowledged" : "Acknowledge"}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
-    </section>
+    </div>
   );
 }
